@@ -1,0 +1,205 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+
+
+
+@model IEnumerable<Admin.Contract.Model.Fees.FeesMaster>
+
+<!-- Page Header -->
+<div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+    <h1 class="page-title fw-semibold fs-18 mb-0">Students List</h1>
+    <div class="ms-md-1 ms-0">
+        <nav>
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Students</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Students List</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-body">
+                <form id="Student_form" class="form">
+                    <div class="row">
+                        <div class="form-group row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Class <span style="color:red">*</span></label>
+
+                                @{
+                                    SelectList Class = new SelectList(ViewBag.classes, "Value", "Text");
+                                }
+                                @Html.DropDownList("ClassId", Class as SelectList, "Select Class", new { @class = "form-control", @title = "Class",@onchange="getData();", @tabindex = "21" })
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="Class" class="form-label">Select a Month </label>
+
+                                @{
+                                    // Array of month names
+                                    string[] monthNames = new string[]
+                                    {
+                                "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+                                    };
+
+                                    // Generating a list of SelectListItem with month names and corresponding numeric values
+                                    var months = Enumerable.Range(1, 12).Select(m => new SelectListItem { Value = m.ToString(), Text = monthNames[m - 1], });
+                                }
+                                @Html.DropDownList("Month", months, "Select Month", new { @class = "form-control", @title = "Month",@onchange="getData();", @tabindex = "21" })
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="Class" class="form-label">Year </label>
+                                @Html.TextBox("Year",null,new{  @class = "form-control", @title = "Class", @tabindex = "21",@onchange="getData();",@placeholder="YYYY"})
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="col-xl-12">
+        <div class="card custom-card">
+           
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table text-nowrap table-striped table-hover" id="feesTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">COMP_CODE</th>
+                                <th scope="col">ClassId</th>
+                                <th scope="col">Month</th>
+                                <th scope="col">Year</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">FeesType</th>
+                                <th scope="col">GST</th>
+                                <th scope="col">EntryDate</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#classIdFilter, #monthFilter, #yearFilter').on('change', function () {
+        getData();
+    });
+
+    function getData() {
+        var classId = $('#ClassId').val();
+        var month = $('#Month').val();
+        var year = $('#Year').val();
+
+        $.ajax({
+            url: '/Fees/MyFees/GetFeesMaster',
+            method: 'GET',
+            data: {
+                ClassId: classId,
+                Month: month,
+                Year: year
+            },
+            success: function (data) {
+                console.log(data);
+                if ($.fn.DataTable.isDataTable('#feesTable')) {
+                    $('#feesTable').DataTable().clear().destroy();
+                }
+
+                $('#feesTable').DataTable({
+                    data: data,
+                    columns: [
+                        { data: 'id' },
+                        { data: 'comP_CODE' },
+                        { data: 'classId' },
+                        { data: 'month' },
+                        { data: 'year' },
+                        { data: 'amount' },
+                        { data: 'feesType' },
+                        { data: 'gst' },
+                        { data: 'entryDate' },
+                        {
+                            data: 'active',
+                            render: function (data) {
+                                return data === 1 ? '<span class="badge bg-success-transparent">Active</span>' : '<span class="badge bg-secondary-transparent">Inactive</span>';
+                            }
+                        }
+                    ],
+                   
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+
+    // function getData() {
+    //     var classId = $('#ClassId').val();
+    //     var month = $('#Month').val();
+    //     var year = $('#Year').val();
+
+    //     $.ajax({
+    //         url: '/Fees/MyFees/GetFeesMaster',
+    //         method: 'GET',
+    //         data: {
+    //             ClassId: classId,
+    //             Month: month,
+    //             Year: year
+    //         },
+    //         success: function (data) {
+    //             console.log(data);
+    //             $('#feesTable').DataTable().clear().destroy();
+
+    //             $('#feesTable').DataTable({
+    //                 data: data,
+    //                 columns: [
+    //                     { data: 'id' },
+    //                     { data: 'comP_CODE' },
+    //                     { data: 'classId' },
+    //                     { data: 'month' },
+    //                     { data: 'year' },
+    //                     { data: 'amount' },
+    //                     { data: 'feesType' },
+    //                     { data: 'gst' }, 
+    //                     { data: 'entryDate' },
+
+    //                     // Add other columns as needed
+    //                     {
+    //                         data: 'active',
+    //                         render: function (data) {
+    //                             return data === 1 ? '<td><span class="badge bg-success-transparent">Active</span></td>' : '<td><span class="badge bg-secondary-transparent">Inactive</span></td>';
+    //                         }
+    //                     }
+    //                 ],
+    //                 dom: 'Bfrtip', // Include Buttons extension
+    //                 buttons: [
+    //                     'excel', 'pdf', 'print' // Buttons for Excel, PDF, and Print
+    //                 ]
+    //             });
+    //         },
+    //         error: function (xhr, status, error) {
+    //             console.error(error);
+    //         }
+    //     });
+    // }
+
+    getData();
+</script>
+

@@ -1,0 +1,41 @@
+﻿
+
+
+
+input[type="text"]:hover,
+input[type="number"]:hover {
+    border-bottom: 2px solid #007BFF; /*Change color as needed */
+    transition: border-bottom 0.3s ease-in-out, left 0.3s ease-in-out;
+}
+
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+    border-bottom: 2px solid #28A745; /*Change color as needed */
+    transition: border-bottom 0.3s ease-in-out, left 0.3s ease-in-out;
+}
+
+
+select:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: #007BFF; /* Change color as needed */
+    transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+    transform-origin: bottom right;
+}
+
+input[type="text"]:focus:before,
+input[type="text"]:hover:before,
+input[type="number"]:focus:before,
+input[type="number"]:hover:before,
+select:focus:before,
+select:hover:before {
+
+    width: 100%;
+    left: 0;
+    transform-origin: bottom left;
+}

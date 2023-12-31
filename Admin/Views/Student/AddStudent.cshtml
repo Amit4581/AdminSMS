@@ -1,0 +1,360 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Admin.Contract.Model.Student.StudentDetails
+
+@* <link href="~/customcss/formstylesheet.css" rel="stylesheet" /> *@
+
+<div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+    <h1 class="page-title fw-semibold fs-18 mb-0">Add Students</h1>
+    <div class="ms-md-1 ms-0">
+        <nav>
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Students</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Add Students</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-body">
+
+                <form id="Student_form" class="form">
+                    <div class="row">
+                        <div class="form-group row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Student Code <span style="color:red">*</span></label>
+
+                                @Html.TextBoxFor(m => m.StudentId, new {@class = "form-control ravi", @placeholder = "Student Code" , onkeyup="FindStudent()" })
+                                <ul id="selectedValue"></ul>
+                                @Html.HiddenFor(m => m.Action, new {@class = "form-control ravi", @placeholder = "Student Code" , onkeyup="FindStudent()" })
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Student Name <span style="color:red">*</span></label>
+                          
+                                @Html.TextBoxFor(m => m.StudentName, new { @class = "form-control", @placeholder = "Student Name" })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Class <span style="color:red">*</span></label>
+                           
+                                @{
+                                    SelectList Class = new SelectList(ViewBag.classes, "Value", "Text");
+                                }
+                                @Html.DropDownListFor(m => m.ClassId, Class as SelectList, "Select Class", new { @class = "form-control", @title = "Class", @tabindex = "21" })
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="Class" class="form-label">Section </label>
+                           
+                                @{
+                                    SelectList Section = new SelectList(ViewBag.Section, "Value", "Text");
+                                }
+                                @Html.DropDownListFor(m => m.SectionId, Section as SelectList, "Select Section", new { @class = "form-control", @title = "Section", @tabindex = "21" })
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Address</label>
+                            <div class="row">
+                                <div class="col-xl-12 mb-3">
+                                    @Html.TextBoxFor(m => m.Address1, new { @class = "form-control", @placeholder = "Street" })
+
+                                </div>
+                                <div class="col-xl-12 mb-3">
+                                    @Html.TextBoxFor(m => m.Address2, new { @class = "form-control", @placeholder = "Landmark" })
+
+                                </div>
+                                <div class="col-xxl-6 col-xl-12 mb-3">
+                                    @Html.TextBoxFor(m => m.City, new { @class = "form-control", @placeholder = "Landmark" })
+
+                                </div>
+                                <div class="col-xxl-6 col-xl-12 mb-3">
+
+                                    @{
+                                        SelectList State = new SelectList(ViewBag.State, "Value", "Text");
+                                    }
+                                    @Html.DropDownListFor(model => model.State, State as SelectList, "-------Select State-------", new { @class = "form-control", @title = "State", @tabindex = "21" })
+                                </div>
+                                <div class="col-xxl-6 col-xl-12 mb-3">
+                                    @Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control",@type="number",  @placeholder = "Postal/Zip code" })
+                                </div>
+                                <div class="col-xxl-6 col-xl-12 mb-3">
+                                    @{
+                                        SelectList Country = new SelectList(ViewBag.Country, "Value", "Text");
+                                    }
+                                    @Html.DropDownListFor(model => model.Country, Country as SelectList, "-------Select Country-------", new { @class = "form-control", @title = "Country", @tabindex = "21" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+
+                            <div class="col-xl-12 mb-3">
+                                <label class="form-label">Email</label>
+                                @Html.TextBoxFor(m => m.StudentEmail, new { @class = "form-control", @placeholder = "Student Email" })
+
+                            </div>
+
+
+                            <div class="col-xl-12 mb-3">
+                                <label class="form-label">D.O.B</label>
+                                @Html.TextBoxFor(m => m.DOB, new { @class = "form-control", @placeholder = "Date of Birth",@type="date" })
+
+                            </div>
+                            <div class="row">
+
+                                <div class="col-xl-12 mb-3">
+
+                                    <label class="form-label mb-3">Gender</label>
+                                    <div class="col-xl-12">
+                                        @{
+                                            SelectList Gender = new SelectList(ViewBag.Gender, "Value", "Text");
+                                        }
+                                        @Html.DropDownListFor(m => m.Gender, Gender as SelectList, "-------Select Gender-------", new { @class = "form-control", @title = "Gender", @tabindex = "21" })
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Contact Number</label>
+                                @Html.TextBoxFor(m => m.StudentPhone, new { @class = "form-control",@type="number" ,@placeholder = "Phone number" })
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Alternative Contact</label>
+                                @Html.TextBoxFor(m => m.EmergencyContact, new { @class = "form-control",@type="number" ,@placeholder = "Alternative Contact" })
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Father's Name</label>
+                                @Html.TextBoxFor(m => m.FathersName, new { @class = "form-control",@type="text" ,@placeholder = "Father's Name" })
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Mother's Name</label>
+                                @Html.TextBoxFor(m => m.MothersName, new { @class = "form-control",@type="text" ,@placeholder = "Mother's Name" })
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group row">
+                            <div class="col-md-6 mb-3">
+                                <label for="StudentBloodGroup" class="form-label">Student BloodGroup</label>
+                                @{
+                                    SelectList BloodGroup = new SelectList(ViewBag.BloodGroup, "Value", "Text");
+                                }
+                                @Html.DropDownListFor(m => m.StudentBloodGroup, BloodGroup as SelectList, "------- Select Blood Group -------", new { @class = "form-control", @title = "Gender", @tabindex = "21" })
+
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="GurdianName" class="form-label">Gurdian Name</label>
+                                @Html.TextBoxFor(m => m.GurdianName, new { @class = "form-control", @placeholder = "Gurdian Name" })
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+
+                            <div class="col-md-12 mb-3">
+                                <label for="MedicalHistory" class="form-label">Medical History</label>
+                                @Html.TextAreaFor(m => m.MedicalHistory, new { @class = "form-control", @placeholder = "Medical History" })
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-12">
+                            <div class="form-check mb-3">
+                                <label for="FileUpload">File Upload:</label>
+                                <input type="hidden" name="fileInput" value="" id="fileInput" />
+                                <input type="file" name="FileUpload" id="FileUpload" value="" onchange="fileUpload()" />
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="gridCheck">
+                                <label class="form-check-label" for="gridCheck">
+                                    Check me out
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="col-md-12">
+                            <input type="button" class="btn btn-primary  btn-square btn-block" onclick="SaveData();" value="Register" />
+                            @* <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            </div> *@
+
+
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+
+
+    function fileUpload() {
+        var FileUpload = document.getElementById('FileUpload');
+        var file = FileUpload.files[0];
+
+        if (file) {
+            var formData = new FormData();
+            formData.append('file', file);
+
+            // Send the file to the server using Ajax
+            $.ajax({
+                url: '/Student/UploadFile',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    console.log('File uploaded successfully:', data.filePath);
+                    $('#fileInput').val(data.filePath)
+                },
+                error: function (error) {
+                    console.error('Error uploading file:', error);
+                }
+            });
+        }
+    }
+
+
+
+    function SaveData() {
+        if ($('#StudentId').val() == '') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'StudentId can not  be Blank.'
+            });
+            return false
+        }
+        if ($('#StudentName').val() == '') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Student Name can not  be Blank.'
+            });
+            return false
+        }
+        if ($('#ClassId').val() == '') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Class can not  be Blank.'
+            });
+            return false
+        }
+        if ($('#DOB').val() == '') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'DOB can not  be Blank.'
+            });
+            return false
+        }
+        if ($('#StudentEmail').val() == '') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Student Email can not  be Blank.'
+            });
+            return false
+        }
+
+
+
+        var emp = $("#Student_form").serialize();
+        var url = "/Student/AddStudentDetails";
+        var result = ModelPost(url, emp)
+        if (result = "Success") {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: result
+            });
+
+            setTimeout(function () {
+                window.location.href = '@Url.Action("StudentsList", "Student")';
+            }, 3000);
+        }
+
+    }
+    function FindStudent() {
+        var textbox;
+        var selectValue;
+        $.ajax({
+            url: "/User/Student/GetStudentDetails",
+            type: "POST",
+            dataType: "json",
+            data: { StudentId: $("#StudentId").val() },
+            success: function (EmpList) {
+                let ravi = EmpList;
+                selectValue = $('ul#selectedValue');
+                $('ul#selectedValue').html("");
+                $.each(EmpList, function (key, item) {
+                    var li = $('<li/>').addClass('ui-menu-item').attr('role', 'menuitem')
+                        .html("<a href='#' onclick=\"setText('" + item.text + "','" + item.value + "')\">" + item.text + " - " + item.value + "</a>")
+                        .appendTo(selectValue);
+                })
+                //response($.map(EmpList, function (item) {
+                //    return { label: item.Type_Name, value: item.Type_Code };
+                //}))
+
+            }
+        })
+    }
+    function setText(text, key) {
+        $('ul#selectedValue').html("");
+        $('#StudentId').val(key);
+        $('#StudentName').val(text);
+        GetStudent(key)
+
+    }
+    function GetStudent(id) {
+
+        let url = "/Student/GetEmployeeDetails?StudentId=" + id;
+        var response = Post(url, null);
+        var item = response.data;
+        var dateParts = item.dob.split('T');
+        $('#StudentId').val(item.studentId);
+        $('#StudentName').val(item.studentName);
+        $('#DOB').val(dateParts[0]);
+        $('#StudentEmail').val(item.studentEmail);
+        $('#StudentPhone').val(item.studentPhone);
+        $('#Gender').val(item.gender);
+        $('#FathersName').val(item.fathersName);
+        $('#MothersName').val(item.mothersName);
+        $('#GurdianName').val(item.gurdianName);
+        $('#Address1').val(item.address1);
+        $('#Address2').val(item.address2);
+        $('#EmergencyContact').val(item.emergencyContact);
+        $('#Natinality').val(item.natinality);
+        $('#StudentBloodGroup').val(item.studentBloodGroup);
+        $('#MedicalHistory').val(item.medicalHistory);
+        $('#Action').val('Update');
+    }
+</script>

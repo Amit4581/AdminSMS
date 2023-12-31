@@ -1,0 +1,469 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@{
+    Layout = "_Layout";
+}
+
+@model IEnumerable<Admin.Contract.Model.Master.FormMasterModel>
+
+<link href="~/assets/libs/datatable/buttons.datatables.min.css" rel="stylesheet" />
+
+
+<div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+        <h1 class="page-title fw-semibold fs-18 mb-0">Form Master</h1>
+        <div class="ms-md-1 ms-0">
+            <nav>
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Master</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Application</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Form</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card custom-card">
+                <div class="card-header">
+                    <div class="card-title">@ViewBag.TblName</div>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                      @*   <div> *@
+                            <input id="TableId" value="@ViewBag.TblName" type="hidden" />
+                           @*  <h5>@ViewBag.TblName</h5> *@
+                            @* <hr /> *@
+                            <form id="dynamicForm">
+                                <div class="form-group row">
+                                    @foreach (var column in Model)
+                                    {
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label" asp-for="@column.ColumnName">
+                                                @column.ColumnName@if (column.IS_NULLABLE == "NO")
+                                                {
+                                                    <span style="color:red">*</span>
+                                                }
+                                            </label>
+                                            @if (column.IsIdentity == "1")
+                                            {
+                                                @Html.TextBox(column.ColumnName, null, new { @class = "form-control", @placeholder = @column.ColumnName,  @disabled="disabled" })
+                                            }
+                                            else{
+                                                @switch (column.DataType.ToLower())
+                                                {
+                                                    case string str when str.Contains("int"):
+                                                        @Html.TextBox(column.ColumnName, null, new { @class = "form-control ravi", @placeholder = column.ColumnName, @type = "number" })
+                                                        break;
+
+                                                    case string str when str.Contains("datetime"):
+                                                        @Html.TextBox(column.ColumnName, null, new { @class = "form-control ravi", @placeholder = column.ColumnName, @type = "datetime-local" })
+                                                        break;
+
+                                                    case string str when str.Contains("date"):
+                                                        if (str.Contains("time"))
+                                                        {
+                                                            @Html.TextBox(column.ColumnName, null, new { @class = "form-control ravi", @placeholder = column.ColumnName, @type = "time" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.TextBox(column.ColumnName, null, new { @class = "form-control ravi", @placeholder = column.ColumnName, @type = "date" })
+                                                        }
+                                                        break;                                                   
+
+                                                    case string str when str.Contains("char") || str.Contains("text"):
+                                                        if (column.CHARACTER_MAXIMUM_LENGTH >= 500)
+                                                        {
+                                                            @Html.TextArea(column.ColumnName, null, new { @class = "form-control ravi", @placeholder = column.ColumnName })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.TextBox(column.ColumnName, null, new { @class = "form-control ravi", @placeholder = column.ColumnName })
+                                                        }
+                                                        break;
+
+                                                    case string str when str.Contains("decimal") || str.Contains("numeric"):
+                                                        @Html.TextBox(column.ColumnName, null, new { @class = "form-control ravi", @placeholder = column.ColumnName, @type = "number", step = "any" })
+                                                        break;
+
+                                                    case string str when str.Contains("float") || str.Contains("real"):
+                                                        @Html.TextBox(column.ColumnName, null, new { @class = "form-control ravi", @placeholder = column.ColumnName, @type = "number", step = "any" })
+                                                        break;
+
+                                                    @* case string str when str.Contains("bit"):
+                                                        @Html.CheckBox(column.ColumnName, null, new { @class = "form-check-input ravi" })
+                                                        break; *@
+
+                                                    case string str when str.Contains("binary") || str.Contains("varbinary"):
+                                                        @Html.TextBox(column.ColumnName, null, new { @class = "form-control-file ravi", @type = "file" })
+                                                        break;
+
+                                                    case string str when str.Contains("uniqueidentifier"):
+                                                        @Html.TextBox(column.ColumnName, null, new { @class = "form-control ravi", @placeholder = column.ColumnName })
+                                                        break;
+
+                                                    // Add more cases for other data types as needed
+
+                                                    default:
+                                                        @Html.TextBox(column.ColumnName, null, new { @class = "form-control ravi", @placeholder = column.ColumnName })
+                                                        break;
+                                                }
+
+                                            }
+
+                                           
+                                        </div>
+                                    }
+
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="p-3 border-bottom border-block-end-dashed">
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div class="fs-4 fw-semibold bg-primary-transparent p-1 rounded">
+                                                <button class="btn btn-success label-btn label-end" type="button" id="saveButton">
+                                                    Submit
+                                                    <i class="ri-thumb-up-line label-btn-icon ms-2"></i>
+                                                </button>
+                                            </div>
+                                            <div class="fs-4 fw-semibold bg-primary-transparent p-1 rounded">
+                                                <button class="btn btn-secondary label-btn label-end" type="button" onclick="Update()" id="UpdateButton">
+                                                    Update
+                                                    <i class="ri-thumb-up-line label-btn-icon ms-2"></i>
+                                                </button>
+                                            </div>
+                                            <div class="fs-4 fw-semibold bg-primary-transparent p-1 rounded">
+                                                <button class="btn btn-danger label-btn label-end" type="button" onclick="Delete()" id="UpdateButton">
+                                                    Delete
+                                                    <i class="ri-thumb-up-line label-btn-icon ms-2"></i>
+                                                </button>
+                                            </div>
+
+                                            <div class="fs-4 fw-semibold bg-primary-transparent p-1 rounded">
+                                                <button class="btn btn-danger label-btn label-end" type="button" onclick="validateForm(event)" id="ValidateForm">
+                                                    validateForm
+                                                    <i class="ri-thumb-up-line label-btn-icon ms-2"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @* <button type="button" id="saveButton">Save</button> *@
+                            </form>
+                       @*  </div> *@
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-12">
+            <div class="card custom-card">
+                <button class="btn btn-success label-btn label-end" type="button" onclick="getColumns()">Get Columns</button>
+                <div class="card-body">
+                        <div class="table-responsive" id="tableDataResult"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $(document).ready(function () {
+                getColumns();
+            });
+
+            $('#saveButton').click(function () {
+                var event = new Event('click'); // Creating a simulated click event
+                var validationPassed = validateForm(event); // Check if the validation passes
+
+                if (!validationPassed) {
+                    return; // Exit the function if validation fails
+                }
+
+                var TableId = $('#TableId').val()
+                var formData = {};
+
+                $('#dynamicForm').serializeArray().forEach(function (item) {
+                    formData[item.name] = item.value;
+                });
+                // Combine form data with the TblName
+                var postData = {
+                    formData: formData,
+                    TblName: TableId
+                };
+                $.ajax({
+                    url: '@Url.Action("SaveData", "FormMaster", new { area = "Master" })' + '?TblName=' + TableId,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function (response) {
+                        getColumns();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Record Save Successfully'
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                    }
+                });
+                
+            });
+        });
+
+        function Delete() {
+            var event = new Event('click'); // Creating a simulated click event
+            var validationPassed = validateForm(event); // Check if the validation passes
+            if (!validationPassed) {
+                return; // Exit the function if validation fails
+            }
+
+            var TableId = $('#TableId').val()
+            var initialDisabledState = {};
+            // Store the initial disabled state of inputs
+            $('#dynamicForm :input:disabled').each(function () {
+                initialDisabledState[this.id] = true; // Store the ID and its disabled state
+            });
+            $('#dynamicForm :input:disabled').prop('disabled', false);
+
+            var formData = {};
+            $('#dynamicForm').serializeArray().forEach(function (item) {
+                formData[item.name] = item.value;
+            });
+
+            // Set the inputs back to their initial disabled state
+            $.each(initialDisabledState, function (id, isDisabled) {
+                $('#' + id).prop('disabled', isDisabled);
+            });
+            // Combine form data with the TblName
+            var postData = {
+                formData: formData,
+                TblName: TableId
+            };
+            console.log(postData);
+            $.ajax({
+                url: '@Url.Action("Deletedata", "FormMaster", new { area = "Master" })' + '?TblName=' + TableId,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    getColumns();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Record Deleted Successfully'
+                    });
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Record has not been Deleted.'
+                    });
+                }
+            });           
+        }
+      
+
+        function Update() {
+            var event = new Event('click'); // Creating a simulated click event
+            var validationPassed = validateForm(event); // Check if the validation passes
+            if (!validationPassed) {
+                return; // Exit the function if validation fails
+            }
+
+            var TableId = $('#TableId').val()
+            var initialDisabledState = {};
+            // Store the initial disabled state of inputs
+            $('#dynamicForm :input:disabled').each(function () {
+                initialDisabledState[this.id] = true; // Store the ID and its disabled state
+            });
+            $('#dynamicForm :input:disabled').prop('disabled', false);
+
+            var formData = {};
+            $('#dynamicForm').serializeArray().forEach(function (item) {
+                formData[item.name] = item.value;
+            });
+
+            // Set the inputs back to their initial disabled state
+            $.each(initialDisabledState, function (id, isDisabled) {
+                $('#' + id).prop('disabled', isDisabled);
+            });
+            // Combine form data with the TblName
+            var postData = {
+                formData: formData,
+                TblName: TableId
+            };
+            console.log(postData); 
+            $.ajax({
+                url: '@Url.Action("UpdateData", "FormMaster", new { area = "Master" })' + '?TblName=' + TableId,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    getColumns();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Record Updated Successfully'
+                    });
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Record has not been Updated.'
+                    });
+                }
+            });
+            
+        }
+        function validateForm(event) {
+            event.preventDefault(); // Prevent form submission
+
+            var fieldsToValidate = document.querySelectorAll('input[id*=id i][class*=Ravi]'); // Select fields with IDs containing "id" in any case
+            var isValid = true;
+
+            fieldsToValidate.forEach(function (field) {
+                if (field.value.trim() === '') {
+                    isValid = false;
+                    // You can customize the alert or validation message here
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: `The field "${field.id}" cannot be empty!`
+                    });
+                    //alert(`The field "${field.id}" cannot be empty!`);
+                    return; // Exit the forEach loop early if a field is empty
+                }
+            });
+
+            if (!isValid) {
+                return; // Exit the function if any field is empty
+            }
+            // If all "id" fields are not empty, proceed with form submission or further action
+            // For demonstration purposes, alerting the form data
+            // var formData = {};
+            // var formInputs = document.querySelectorAll('#dynamicForm input');
+            // formInputs.forEach(function (input) {
+            //     formData[input.name] = input.value;
+            // });
+            // alert('Form data: ' + JSON.stringify(formData));
+            return isValid;
+        }
+
+        function getColumns() {
+            var tableName = $('#TableId').val()
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetTabledata", "FormMaster", new { area = "Master" })' + '?tableName=' + tableName,
+                contentType: 'application/json',
+              
+                success: function (data) {
+                    console.log(data);
+                    displayTableData(data);
+                    $('#myTable').DataTable();
+                },
+                error: function () {
+                    alert('Error fetching columns.');
+                }
+            });
+        }
+
+        // Function to handle Edit button click
+        function handleEdit(rowData) {
+            Object.keys(rowData).forEach(function (key) {
+                $('#' + key).val(rowData[key]); // Fill data into input elements based on ID
+            });
+            console.log('Edit clicked. Row Data:', rowData);
+            // Additional logic for editing...
+        }
+
+        // Function to handle Delete button click
+        function handleDelete(rowData) {
+            Object.keys(rowData).forEach(function (key) {
+                $('#' + key).val(rowData[key]); // Fill data into input elements based on ID
+            });
+            // Additional logic for deletion...
+        }
+
+        function displayTableData(data) {
+            var resultDiv = $('#tableDataResult');
+            resultDiv.empty();
+
+            if ($.fn.DataTable.isDataTable('#table')) {
+                $('#table').DataTable().destroy();
+            }
+
+            if (data.length > 0) {
+                var table = $('<table>').attr('id', 'table').addClass('table text-nowrap').appendTo(resultDiv);
+                var headerRow = $('<thead>').appendTo(table);
+
+                // Create table headers with scope="col"
+                var headers = $('<tr>').appendTo(headerRow);
+                Object.keys(data[0]).forEach(function (key) {
+                    $('<th scope="col">').text(key).appendTo(headers);
+                });
+
+                // Add additional "Actions" column header
+                $('<th scope="col">').text('Actions').appendTo(headers);
+
+                // Populate table with data
+                var body = $('<tbody>').appendTo(table);
+                data.forEach(function (row) {
+                    var tableRow = $('<tr>').appendTo(body);
+                    Object.values(row).forEach(function (value) {
+                        $('<td>').text(value).appendTo(tableRow);
+                    });
+
+                    // Add "Edit" and "Delete" buttons to each row
+                    var actionCell = $('<td>').appendTo(tableRow);
+                    var editButton = $('<button>').addClass('btn btn-primary').text('Edit').appendTo(actionCell);
+                    var deleteButton = $('<button>').addClass('btn btn-danger mx-1').text('Delete').appendTo(actionCell);
+
+                    // Attach onClick function to get row data for edit/delete
+                    editButton.click(function () {
+                        handleEdit(row);
+                    });
+
+                    deleteButton.click(function () {
+                        handleDelete(row);
+                    });
+                });
+
+                // Initialize DataTables
+                // table.DataTable();
+                table.DataTable({
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'excel', 'pdf', 'print'
+                    ]
+                });
+            } else {
+                resultDiv.text('No data found.');
+            }
+        }
+      
+        function fillInputs(rowData) {
+            // Fill input elements where ID matches the table header
+            for (var key in rowData) {
+                var value = rowData[key];
+                $('#' + key).val(value);
+            }
+        }
+
+    </script>
+}

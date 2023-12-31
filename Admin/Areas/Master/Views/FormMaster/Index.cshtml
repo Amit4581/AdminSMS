@@ -1,0 +1,60 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+
+@model IEnumerable<Admin.Contract.Model.Master.TableMasterModel>
+
+
+<div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+        <h1 class="page-title fw-semibold fs-18 mb-0">MCQ Exam List</h1>
+        <div class="ms-md-1 ms-0">
+            <nav>
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Master</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Application</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Form</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card custom-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <div class="form-group row">
+                            @foreach (var column in Model)
+                            {
+                                <div class="col-md-3 mb-3">
+                                    <a href="/master/FormMaster/MyForm?TblName=@column.TABLE_NAME" class="side-menu__item ">
+                                        <div class="card-body"> 
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-3">
+                                                    <span class="avatar avatar-md">
+                                                        <img src="../../assets/images/faces/15.jpg" alt="img">
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <p class="card-text mb-0 fs-14 fw-semibold">@column.TABLE_NAME</p>
+                                                    <div class="card-title text-muted fs-12 mb-0">Correspondent Professor</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+</div>

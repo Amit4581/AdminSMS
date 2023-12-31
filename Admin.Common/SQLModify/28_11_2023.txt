@@ -1,0 +1,441 @@
+﻿system
+
+CREATE TABLE [dbo].[SYS](
+    [Id] int identity(1,1),
+	[COMP_CODE] [nvarchar](50) NULL,
+	[COMP_NAME] [nvarchar](max) NULL,
+	[Short_Name] [nvarchar](50) NULL,
+	[DATABASENAME] [nvarchar](250) NULL,
+	[USERID] [nvarchar](50) NULL,
+	[USERPASSWORD] [nvarchar](50) NULL,
+	[DSN] [nvarchar](50) NULL,
+	[CONNECTSTRING] [nvarchar](max) NULL,
+	[ISACTIVE] [varchar](5) NULL
+	
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
+alter PROCEDURE [dbo].[sp_SYSMaster]
+    @Action NVARCHAR(10) =NULL,
+    @COMP_CODE NVARCHAR(50) =NULL,
+    @COMP_NAME NVARCHAR(MAX) =NULL,
+    @Short_Name NVARCHAR(50) =NULL,
+    @DATABASENAME NVARCHAR(250) =NULL,
+    @USERID NVARCHAR(50) =NULL,
+    @USERPASSWORD NVARCHAR(50) =NULL,
+    @DSN NVARCHAR(50) =NULL,
+    @CONNECTSTRING NVARCHAR(MAX) =NULL,
+    @ISACTIVE VARCHAR(5)  =NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        IF @Action = 'INSERT'
+        BEGIN
+            INSERT INTO [dbo].[SYS] (
+                [COMP_CODE],
+                [COMP_NAME],
+                [Short_Name],
+                [DATABASENAME],
+                [USERID],
+                [USERPASSWORD],
+                [DSN],
+                [CONNECTSTRING],
+                [ISACTIVE]
+            )
+            VALUES (
+                @COMP_CODE,
+                @COMP_NAME,
+                @Short_Name,
+                @DATABASENAME,
+                @USERID,
+                @USERPASSWORD,
+                @DSN,
+                @CONNECTSTRING,
+                @ISACTIVE
+            );
+        END
+        ELSE IF @Action = 'UPDATE'
+        BEGIN
+            UPDATE [dbo].[SYS]
+            SET
+                [COMP_NAME] = @COMP_NAME,
+                [Short_Name] = @Short_Name,
+                [DATABASENAME] = @DATABASENAME,
+                [USERID] = @USERID,
+                [USERPASSWORD] = @USERPASSWORD,
+                [DSN] = @DSN,
+                [CONNECTSTRING] = @CONNECTSTRING,
+                [ISACTIVE] = @ISACTIVE
+            WHERE [COMP_CODE] = @COMP_CODE;
+        END
+        ELSE IF @Action = 'DELETE'
+        BEGIN
+            DELETE FROM [dbo].[SYS]
+            WHERE [COMP_CODE] = @COMP_CODE;
+        END
+        ELSE IF @Action = 'SELECT'
+        BEGIN
+            SELECT * FROM [dbo].[SYS] WHERE [COMP_CODE] = @COMP_CODE;
+        END
+        ELSE IF @Action = 'ALL'
+        BEGIN
+            SELECT * FROM [dbo].[SYS] 
+        END
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        -- Handle the error as per your requirement
+        THROW;
+    END CATCH
+END;
+
+
+-----------------------------------------------------------------------------------------------
+
+
+USE [RaviSMS]
+GO
+
+/****** Object:  Table [dbo].[mcqQS]    Script Date: 11/28/2023 12:56:54 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[MCQQS](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Comp_Code] [varchar](50) NULL,
+	[CourseId] [varchar](50) NULL,
+    [ClassId] [varchar](50) NULL,
+	[CourseName] [varchar](50) NULL,
+	[TeacherAssign] [varchar](50) NULL,
+	[QsId] [varchar](50) NULL,
+	[QsNo] [varchar](50) NULL,
+	[Qs] [varchar](700) NULL,
+	[Op1] [varchar](300) NULL,
+	[Op2] [varchar](300) NULL,
+	[Op3] [varchar](300) NULL,
+	[Op4] [varchar](300) NULL,
+	[Ans] [varchar](300) NULL,
+	[Tag] [varchar](100) NULL,
+	[EntrydateTime] datetime,
+
+ CONSTRAINT [PK_MCQQS2] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+
+
+--drop table [mcqQS]
+
+
+CREATE PROCEDURE SP_ManageMCQQS
+    @Action NVARCHAR(10),
+    @Id INT = NULL,
+    @Comp_Code VARCHAR(50) = NULL,
+    @CourseId VARCHAR(50) = NULL,
+    @ClassId VARCHAR(50) = NULL,
+    @CourseName VARCHAR(50) = NULL,
+    @TeacherAssign VARCHAR(50) = NULL,
+    @QsId VARCHAR(50) = NULL,
+    @QsNo VARCHAR(50) = NULL,
+    @Qs VARCHAR(700) = NULL,
+    @Op1 VARCHAR(300) = NULL,
+    @Op2 VARCHAR(300) = NULL,
+    @Op3 VARCHAR(300) = NULL,
+    @Op4 VARCHAR(300) = NULL,
+    @Ans VARCHAR(300) = NULL,
+    @Tag VARCHAR(100) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        IF @Action = 'INSERT'
+        BEGIN
+            INSERT INTO dbo.MCQQS (Comp_Code, CourseId, ClassId, CourseName, TeacherAssign, QsId, QsNo, Qs, Op1, Op2, Op3, Op4, Ans, Tag, EntrydateTime)
+            VALUES (@Comp_Code, @CourseId, @ClassId, @CourseName, @TeacherAssign, @QsId, @QsNo, @Qs, @Op1, @Op2, @Op3, @Op4, @Ans, @Tag, GETDATE());
+        END
+        ELSE IF @Action = 'UPDATE'
+        BEGIN
+            UPDATE dbo.MCQQS
+            SET Comp_Code = @Comp_Code,
+                CourseId = @CourseId,
+                ClassId = @ClassId,
+                CourseName = @CourseName,
+                TeacherAssign = @TeacherAssign,
+                QsId = @QsId,
+                QsNo = @QsNo,
+                Qs = @Qs,
+                Op1 = @Op1,
+                Op2 = @Op2,
+                Op3 = @Op3,
+                Op4 = @Op4,
+                Ans = @Ans,
+                Tag = @Tag
+            WHERE Id = @Id;
+        END
+        ELSE IF @Action = 'DELETE'
+        BEGIN
+            DELETE FROM dbo.MCQQS WHERE Id = @Id;
+        END
+
+		  ELSE IF @Action = 'SELECT'
+        BEGIN
+            Select *  FROM dbo.MCQQS WHERE Id = @Id;
+        END
+		  ELSE IF @Action = 'ALL'
+        BEGIN
+            Select *  FROM dbo.MCQQS
+        END
+
+        COMMIT;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK;
+        -- You can log or handle the error as needed
+      --  THROW;
+    END CATCH
+END;
+
+
+
+
+-----------------------------------------------------------------------------------------------
+
+
+CREATE TABLE [dbo].[MCQCourseDetail](
+    Id int identity(1,1),
+	COMP_CODE [varchar](50) NULL,
+	[CourseID] [varchar](50) NULL,
+	[CourseName] [varchar](300) NULL,
+	[CourseDesc] [varchar](300) NULL,
+	[ClassId] [varchar](300) NULL,
+	Start_time datetime null,
+	Timeduration time null,
+	TotalMark int null,
+	PassMark int null,
+	CourseToken nvarchar(50) null,
+	MaxNoStudent int null,
+	EntryDate datetime null,
+	Active int null,
+
+) ON [PRIMARY]
+
+
+
+
+CREATE PROCEDURE [dbo].[SP_ManageMCQCourseDetail]
+    @Id INT = NULL,
+    @COMP_CODE [varchar](50) =Null,
+    @CourseID VARCHAR(50) =Null,
+    @CourseName VARCHAR(300) =Null,
+    @CourseDesc VARCHAR(300) =Null,
+    @ClassId VARCHAR(300) =Null,
+    @Start_time DATETIME =Null,
+    @Timeduration TIME =Null,
+    @TotalMark INT =Null,
+    @PassMark INT =Null,
+    @CourseToken NVARCHAR(50) =Null,
+    @MaxNoStudent INT =Null,
+    @EntryDate DATETIME =Null,
+    @Active INT =Null,
+    @Action VARCHAR(10)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        IF @Action = 'INSERT'
+        BEGIN
+            INSERT INTO [dbo].[MCQCourseDetail] (
+			    [COMP_CODE],
+                [CourseID],
+                [CourseName],
+                [CourseDesc],
+                [ClassId],
+                [Start_time],
+                [Timeduration],
+                [TotalMark],
+                [PassMark],
+                [CourseToken],
+                [MaxNoStudent],
+                [EntryDate],
+                [Active]
+            )
+            VALUES (
+			    @COMP_CODE,
+                @CourseID,
+                @CourseName,
+                @CourseDesc,
+                @ClassId,
+                @Start_time,
+                @Timeduration,
+                @TotalMark,
+                @PassMark,
+                @CourseToken,
+                @MaxNoStudent,
+                GETDATE(),
+                @Active
+            );
+        END
+        ELSE IF @Action = 'UPDATE'
+        BEGIN
+            UPDATE [dbo].[MCQCourseDetail]
+            SET
+			    [COMP_CODE]=@COMP_CODE,
+                [CourseID] = @CourseID,
+                [CourseName] = @CourseName,
+                [CourseDesc] = @CourseDesc,
+                [ClassId] = @ClassId,
+                [Start_time] = @Start_time,
+                [Timeduration] = @Timeduration,
+                [TotalMark] = @TotalMark,
+                [PassMark] = @PassMark,
+                [CourseToken] = @CourseToken,
+                [MaxNoStudent] = @MaxNoStudent,
+                [EntryDate] = GETDATE(),
+                [Active] = @Active
+            WHERE
+                [Id] = @Id;
+        END
+        ELSE IF @Action = 'DELETE'
+        BEGIN
+            DELETE FROM [dbo].[MCQCourseDetail]
+            WHERE
+                [Id] = @Id;
+        END
+        ELSE IF @Action = 'SELECT'
+        BEGIN
+            SELECT *
+            FROM [dbo].[MCQCourseDetail]
+            WHERE
+                [Id] = @Id;
+        END
+		  ELSE IF @Action = 'ALL'
+        BEGIN
+            SELECT *
+            FROM [dbo].[MCQCourseDetail]
+          
+        END
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+
+
+------------------------------------------------------------------------------------------------
+
+
+CREATE TABLE [dbo].[MCQStudentResultSheet](
+    Id int identity(1,1),
+	COMP_CODE [varchar](50) NULL,
+	[StudentId] [varchar](50) NULL,
+	[CourseId] [varchar](50) NULL,
+    [ClassId] [varchar](50) NULL,
+	[CourseName] [varchar](50) NULL,
+	[QsId] [varchar](50) NULL,
+	[QsNo] [varchar](50) NULL,
+	[Qs] [varchar](700) NULL,
+	[AnsGiven] [varchar](300) NULL,
+	[CorrectAns] [varchar](300) NULL,
+	[MarkObtain] [varchar](300) NULL,	
+	EntryDate datetime null,
+	Active int null,
+) ON [PRIMARY]
+
+
+
+CREATE PROCEDURE [dbo].[SP_ManageStudentMCQResult]
+    @Action VARCHAR(10),
+    @Id INT = NULL,
+    @COMP_CODE VARCHAR(50) = NULL,
+    @StudentId VARCHAR(50) = NULL,
+    @CourseId VARCHAR(50) = NULL,
+    @ClassId VARCHAR(50) = NULL,
+    @CourseName VARCHAR(50) = NULL,
+    @QsId VARCHAR(50) = NULL,
+    @QsNo VARCHAR(50) = NULL,
+    @Qs VARCHAR(700) = NULL,
+    @AnsGiven VARCHAR(300) = NULL,
+    @CorrectAns VARCHAR(300) = NULL,
+    @MarkObtain VARCHAR(300) = NULL,
+    @Active INT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        IF @Action = 'INSERT'
+        BEGIN
+            INSERT INTO [MCQStudentResultSheet] (COMP_CODE, StudentId, CourseId, ClassId, CourseName, QsId, QsNo, Qs, AnsGiven, CorrectAns, MarkObtain, Active, EntryDate)
+            VALUES (@COMP_CODE, @StudentId, @CourseId, @ClassId, @CourseName, @QsId, @QsNo, @Qs, @AnsGiven, @CorrectAns, @MarkObtain, @Active, GETDATE());
+        END
+        ELSE IF @Action = 'UPDATE'
+        BEGIN
+            UPDATE MCQStudentResultSheet
+            SET COMP_CODE = @COMP_CODE,
+                StudentId = @StudentId,
+                CourseId = @CourseId,
+                ClassId = @ClassId,
+                CourseName = @CourseName,
+                QsId = @QsId,
+                QsNo = @QsNo,
+                Qs = @Qs,
+                AnsGiven = @AnsGiven,
+                CorrectAns = @CorrectAns,
+                MarkObtain = @MarkObtain,
+                Active = @Active
+            WHERE Id = @Id;
+        END
+        ELSE IF @Action = 'DELETE'
+        BEGIN
+            DELETE FROM MCQStudentResultSheet WHERE Id = @Id;
+        END
+        ELSE IF @Action = 'SELECT'
+        BEGIN
+            SELECT * FROM MCQStudentResultSheet WHERE Id = @Id;
+        END
+		  ELSE IF @Action = 'ALL'
+        BEGIN
+            SELECT * FROM MCQStudentResultSheet;
+        END
+        COMMIT;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK;
+        -- Optionally log or handle the error
+        THROW;
+    END CATCH
+END
+
+
+
+
+
+
+
+
+

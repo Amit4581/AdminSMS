@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewBag.Title = "AddAttendence";
+}
+@model Admin.Contract.Model.Student.StudentDetails
+
+<div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+        <h1 class="page-title fw-semibold fs-18 mb-0">Attendence</h1>
+        <div class="ms-md-1 ms-0">
+            <nav>
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Studence</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Attendence</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Add</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card custom-card">
+                <div class="card-header">
+                    <div class="card-title">Add Attendence</div>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Class <span style="color:red">*</span></label>
+
+                            @{
+                                SelectList Class = new SelectList(ViewBag.classes, "Value", "Text");
+                            }
+                            @Html.DropDownListFor(m => m.ClassId, Class as SelectList, "Select Class", new { @class = "form-control", @title = "Class", @tabindex = "21" })
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="Class" class="form-label">Section </label>
+
+                            @{
+                                SelectList Section = new SelectList(ViewBag.Section, "Value", "Text");
+                            }
+                            @Html.DropDownListFor(m => m.SectionId, Section as SelectList, "Select Section", new { @class = "form-control", @title = "Section", @tabindex = "21" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <table class="table table-bordered table-responsive table-condensed" id="tblAttenedence" style="width:100%">
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        getData();
+    })
+
+    function getData() {
+       // url= '@Url.Action("Deletedata", "FormMaster", new { area = "Master" })' + '?TblName=' + TableId,
+        var response = Get('/Attendence/StudentList');
+        if (ValidateResponse(response)) {
+            console.log(response);
+            debugger;
+            dtMainCamera.clear();
+            dtMainCamera.rows.add(response.data);
+            dtMainCamera.draw();
+        }
+    }
+    var dtMainCamera = {};
+    dtMainCamera = $('#tblAttenedence').DataTable({
+        data: [],
+        responsive: true,
+        dom: 'Bfrtip',
+        scroller: true,
+        searching: true,
+        scrollY: "400px",
+        scrollX: true,
+        fixedColumns: true,
+        scrollCollapse: true,
+        columns: [
+
+            //{ data: 'brandId', title: 'Brand Id', className: 'reorder' },
+            { data: 'id', title: 'Id' },
+            { data: 'countryName', title: 'Country Name' },
+            {
+                title: 'Country',
+                "mRender": function (data, type, row) {
+                    var row2 = "<input  type='textbox' id='" + row.Id + "' value='" + row.countryName + "' class='text'/>";
+                    return row2
+                }, "aTargets": [1]
+            },
+        ],
+        pageLength: 10,
+        order: [],
+        columnDefs: [{ className: 'dt-center', targets: '_all' }, { orderable: true, searchable: true, targets: [1, -1] }],
+        buttons: [
+            {
+                extend: 'excel',
+                exportOptions: {
+                    format: {
+                        body: function (inner, rowidx, colidx, node) {
+                            if ($(node).children("input").length > 0) {
+                                return $(node).children("input").first().val();
+                            } else {
+                                return inner;
+                            }
+                        }
+                    }
+                }
+            }
+        ]
+    });
+
+
+
+    </script>

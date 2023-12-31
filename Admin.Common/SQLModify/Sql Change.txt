@@ -1,0 +1,77 @@
+﻿
+
+
+CREATE TABLE StudentAttendanceHist (
+    Id INT PRIMARY KEY identity,
+    StudentId NVARCHAR(50) null,
+    StudentName NVARCHAR(50) null,
+    LeaveYear INT null,
+    Month INT null,
+    AtDate DATE null,
+	Status nvarchar(50) null,
+    InTime TIME null,
+    OutTime TIME null,
+    LeaveType NVARCHAR(500) null,
+    ShiftFrom TIME null,
+    ShiftTo TIME  null,
+);
+
+
+CREATE PROCEDURE SP_ManageStudentAttendenceLog
+    @Id INT = NULL,
+    @StudentId NVARCHAR(50) = NULL,
+    @StudentName NVARCHAR(50) = NULL,
+    @LeaveYear INT = NULL,
+    @Month INT = NULL,
+    @AtDate DATE = NULL,
+	@Status NVARCHAR(50) = NULL,
+    @InTime TIME = NULL,
+    @OutTime TIME = NULL,
+    @LeaveType NVARCHAR(500) = NULL,
+    @ShiftFrom TIME = NULL,
+    @ShiftTo TIME = NULL,
+    @Action NVARCHAR(10)
+AS
+BEGIN
+    IF @Action = 'INSERT'
+    BEGIN
+        INSERT INTO StudentAttendanceHist (
+            StudentId, StudentName, LeaveYear, Month, AtDate,Status, InTime, OutTime, LeaveType, ShiftFrom, ShiftTo
+        )
+        VALUES (
+            @StudentId, @StudentName, @LeaveYear, @Month, @AtDate,@Status ,@InTime, @OutTime, @LeaveType, @ShiftFrom, @ShiftTo
+        );
+    END
+    ELSE IF @Action = 'UPDATE'
+    BEGIN
+        UPDATE StudentAttendanceHist
+        SET
+            StudentId = ISNULL(@StudentId, StudentId),
+            StudentName = ISNULL(@StudentName, StudentName),
+            LeaveYear = ISNULL(@LeaveYear, LeaveYear),
+            Month = ISNULL(@Month, Month),
+            AtDate = ISNULL(@AtDate, AtDate),
+			Status =ISNULL(@Status, Status),
+            InTime = ISNULL(@InTime, InTime),
+            OutTime = ISNULL(@OutTime, OutTime),
+            LeaveType = ISNULL(@LeaveType, LeaveType),
+            ShiftFrom = ISNULL(@ShiftFrom, ShiftFrom),
+            ShiftTo = ISNULL(@ShiftTo, ShiftTo)
+        WHERE Id = @Id;
+    END
+    ELSE IF @Action = 'DELETE'
+    BEGIN
+        DELETE FROM StudentAttendanceHist WHERE Id = @Id;
+    END
+    ELSE IF @Action = 'GET'
+    BEGIN
+        SELECT *
+        FROM StudentAttendanceHist
+        WHERE Id = @Id;
+    END
+	 ELSE IF @Action = 'ALL'
+	begin
+	  SELECT *
+        FROM StudentAttendanceHist
+	end
+END;

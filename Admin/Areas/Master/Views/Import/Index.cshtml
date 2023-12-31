@@ -1,0 +1,231 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+
+
+
+@* <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" id="fileInput" name="file" />
+    <button type="submit">Upload</button>
+</form> *@
+
+<div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+        <h1 class="page-title fw-semibold fs-18 mb-0">File Uploads</h1>
+        <div class="ms-md-1 ms-0">
+            <nav>
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Form Elements</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">File Uploads</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <!-- Page Header Close -->
+    <!-- Start:: row-1 -->
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card custom-card">
+                <div class="card-body">
+                   @*  <form id="uploadForm" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="form-group row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Upload Type <span style="color:red">*</span></label>
+
+                                    @Html.TextBox("TblName",null, new {@class = "form-control", @placeholder = "Upload Type"  })
+                                </div>
+                                <div class="col-md-6 mb-3">
+
+
+                                    <label for="formFileLg" class="form-label">Upload File</label>
+                                    <input class="form-control" id="fileInput" type="file">
+                                </div>
+                                <div class="d-grid gap-2 col-6 mx-auto">
+                                    <button class="btn btn-teal me-md-5  btn-wave" onclick="Upload()" type="button"> <i class="ri-settings-4-line label-btn-icon me-2"></i>Upload <i class="ri-save-line"></i></button>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div>
+                                    @Html.TextArea("sqlQuery",null, new {@class = "form-control", @placeholder = "Enter SQL query here"  })
+                                    @*   <textarea id="sqlQuery" rows="5" cols="50" placeholder="Enter SQL query here"></textarea><br><br> 
+                                </div>
+                                <div class="d-grid gap-2 col-6 mx-auto">
+                                    <button class="btn btn-teal me-md-5  btn-wave" onclick="Download()" type="button"> <i class="ri-settings-4-line label-btn-icon me-2"></i>Download <i class="ri-save-line"></i></button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+ *@
+
+
+
+                    <div class="col-xl-12">
+                        <div class="card custom-card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                   Report Wizard
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <nav class="nav nav-style-6 nav-pills mb-3 nav-justified d-sm-flex d-block" role="tablist">
+                                    <a class="nav-link" data-bs-toggle="tab" role="tab" aria-current="page"
+                                       href="#nav-products-justified" aria-selected="false">Download Excel Report</a>
+                                    <a class="nav-link active" data-bs-toggle="tab" role="tab"
+                                       href="#nav-cart-justified" aria-selected="true">
+                                        Upload Excel Report <span class="badge bg-info-transparent ms-1">Full</span>
+                                    </a>
+                                   @*  <a class="nav-link" data-bs-toggle="tab" role="tab" href="#nav-orders-justified"
+                                       aria-selected="false">Orders </a>
+                                    <a class="nav-link" data-bs-toggle="tab" role="tab" href="#nav-offers-justified"
+                                       aria-selected="false">
+                                        Offers <span class="badge bg-warning-transparent ms-1">7</span>
+                                    </a> *@
+                                </nav>
+                                <div class="tab-content">
+                                    <div class="tab-pane text-muted" id="nav-products-justified" role="tabpanel">
+                                        <div class="form-group row">
+                                            <div class="col-md-12 mb-3">
+                                                @Html.TextArea("sqlQuery",null, new {@class = "form-control",@rows="3", @placeholder = "Enter SQL query here"  })
+                                                @*   <textarea id="sqlQuery" rows="5" cols="50" placeholder="Enter SQL query here"></textarea><br><br> *@
+                                            </div>
+                                            <br />
+                                            
+                                            <div class="d-grid gap-2 col-6 mx-auto">
+                                                <button class="btn btn-teal me-md-5  btn-wave" onclick="Download()" type="button"> <i class="ri-settings-4-line label-btn-icon me-2"></i>Download <i class="ri-save-line"></i></button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane show active text-muted" id="nav-cart-justified"
+                                         role="tabpanel">
+                                        <form id="uploadForm" enctype="multipart/form-data">
+                                            <div class="row">
+                                                <div class="form-group row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Upload Type <span style="color:red">*</span></label>
+
+                                                        @Html.TextBox("TblName",null, new {@class = "form-control", @placeholder = "Upload Type"  })
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+
+
+                                                        <label for="formFileLg" class="form-label">Upload File</label>
+                                                        <input class="form-control" id="fileInput" type="file">
+                                                    </div>
+                                                    <div class="d-grid gap-2 col-6 mx-auto">
+                                                        <button class="btn btn-teal me-md-5  btn-wave" onclick="Upload()" type="button"> <i class="ri-settings-4-line label-btn-icon me-2"></i>Upload <i class="ri-save-line"></i></button>
+                                                    </div>
+                                                </div>
+                                               
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="tab-pane text-muted" id="nav-orders-justified" role="tabpanel">
+                                        Unbelievable healthy snack success stories. 12 facts about safe food handling
+                                        tips that will impress your friends. Restaurant weeks by the numbers. Will
+                                        mexican food ever rule the world? The 10 best thai restaurant youtube videos.
+                                        How restaurant weeks can make you sick. The complete beginner's guide to cooking
+                                        healthy food. Unbelievable food stamp success stories. How whole foods markets
+                                        are making the world a better place. 16 things that won't happen in dish
+                                        reviews.
+                                    </div>
+                                    <div class="tab-pane text-muted" id="nav-offers-justified" role="tabpanel">
+                                        Why delicious magazines are killing you. Why our world would end if restaurants
+                                        disappeared. Why restaurants are on crack about restaurants. How restaurants are
+                                        making the world a better place. 8 great articles about minute meals. Why our
+                                        world would end if healthy snacks disappeared. Why the world would end without
+                                        mexican food. The evolution of chef uniforms. How not knowing food processors
+                                        makes you a rookie. Why whole foods markets beat peanut butter on pancakes.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    function Download() {
+        var sqlQuery = $("#sqlQuery").val(); // Get SQL query from textarea
+
+        if (sqlQuery.trim() === "") {
+            alert("Please enter an SQL query.");
+            return;
+        }
+
+        $.ajax({
+            url: "/Master/Import/ExportDataToExcel", // Replace with your controller and action name
+            method: 'POST',
+            data: { sqlQuery: sqlQuery },
+            xhrFields: {
+                responseType: 'blob'
+            },
+            success: function (data) {
+                var a = document.createElement('a');
+                var url = window.URL.createObjectURL(data);
+                a.href = url;
+                a.download = "data.xls";
+                document.body.append(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            },
+            error: function () {
+                alert("Error downloading Excel.");
+            }
+        });
+
+
+    }
+
+    function Upload() {
+        var formData = new FormData();
+        var fileInput = document.getElementById('fileInput');
+        formData.append('TblName', $('#TblName').val());
+        formData.append('file', fileInput.files[0]);
+
+        fetch('/Master/Import/UploadExcelData', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text(); // Adjust to response.json() if expecting JSON
+            })
+            .then(data => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: data
+                });
+                console.log('Response:', data);
+                // Handle success if needed
+            })
+            .catch(error => {
+                console.error('There was a problem with the upload:', error.message);
+                // Handle error if needed
+            });
+    }
+
+
+            // document.getElementById('uploadForm').addEventListener('submit', function (e) {
+            //     e.preventDefault();
+
+
+            // });
+
+
+
+
+</script>

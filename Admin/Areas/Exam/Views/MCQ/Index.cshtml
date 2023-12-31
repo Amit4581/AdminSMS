@@ -1,0 +1,450 @@
+﻿
+@{
+    Layout = "_Layout";
+}
+@model IEnumerable<Admin.Contract.Model.Exam.MCQQS>
+
+@* <h1>MCQ</h1> *@
+@* page Design use by /html/checkout.html *@
+
+<style>
+    .form-check-input[type="radio"] {
+        width: 20px; /* Set desired width */
+        height: 20px; /* Set desired height */
+    }
+
+    .form-check-input[type="radio"] {
+        border: 2px solid #000; /* Set border color and thickness */
+        border-radius: 40%; /* Make the radio button circular */
+    }
+
+    /* Style for label text */
+    .form-check-label {
+        margin-left: 10px; /* Adjust label's spacing from the radio button */
+    }
+</style>
+<div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+        <h1 class="page-title fw-semibold fs-18 mb-0">MCQ</h1>
+        <div class="ms-md-1 ms-0">
+            <nav>
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Exam</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">|MCQ</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <!-- Page Header Close -->
+
+    <div class="container">
+        <!-- Start::row-1 -->
+        <div class="row">
+            <div class="col-xl-9">
+                <div class="card custom-card">
+                    <div class="card-body p-0 product-checkout">
+                        <ul class="nav nav-tabs tab-style-2 d-sm-flex d-block border-bottom border-block-end-dashed" id="myTab1" role="tablist">
+                            @{
+                                int countmodel = 1;
+                            }
+                            @foreach (var item in Model)
+                            {
+                                <li class="nav-item" role="presentation">
+
+                                    @if (countmodel == 1)
+                                    {
+                                        <button class="nav-link active" id="Ques-@item.QsId" data-bs-toggle="tab"
+                                                data-bs-target="#Ques-@item.QsId-pane" type="button" role="tab"
+                                                aria-controls="Ques-@item.QsId" aria-selected="false">
+                                            <i class="ri-question-answer-fill me-2 align-middle"></i>@item.QsNo
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="nav-link" id="Ques-@item.QsId" data-bs-toggle="tab"
+                                                data-bs-target="#Ques-@item.QsId-pane" type="button" role="tab"
+                                                aria-controls="Ques-@item.QsId" aria-selected="false">
+                                            <i class="ri-question-answer-fill me-2 align-middle"></i>@item.QsNo
+                                        </button>
+                                    }
+                                </li>
+                                countmodel++;
+                            }
+                            @*  <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="order-tab" data-bs-toggle="tab"
+                            data-bs-target="#order-tab-pane" type="button" role="tab"
+                            aria-controls="order-tab" aria-selected="true">
+                            <i class="ri-truck-line me-2 align-middle"></i>Shipping
+                            </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="confirmed-tab" data-bs-toggle="tab"
+                            data-bs-target="#confirm-tab-pane" type="button" role="tab"
+                            aria-controls="confirmed-tab" aria-selected="false">
+                            <i class="ri-user-3-line me-2 align-middle"></i>Personal Details
+                            </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="shipped-tab" data-bs-toggle="tab"
+                            data-bs-target="#shipped-tab-pane" type="button" role="tab"
+                            aria-controls="shipped-tab" aria-selected="false">
+                            <i class="ri-bank-card-line me-2 align-middle"></i>Payment
+                            </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="delivered-tab" data-bs-toggle="tab"
+                            data-bs-target="#delivery-tab-pane" type="button" role="tab"
+                            aria-controls="delivered-tab" aria-selected="false">
+                            <i class="ri-checkbox-circle-line me-2 align-middle"></i>Confirmation
+                            </button>
+                            </li> *@
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+
+                            @{
+                                int QuesCount = 1;
+                            }
+                            @foreach (var item in Model)
+                            {
+                                if (QuesCount == 1)
+                                {
+                                    <div class="tab-pane fade show active border-0 p-0" id="Ques-@item.QsId-pane" role="tabpanel"
+                                         aria-labelledby="Ques-@item.QsId-pane" tabindex="-1">
+                                        <div class="p-4">
+                                            <p class="mb-1 fw-semibold text-muted op-5 fs-20">@item.QsNo</p>
+                                            <div class="fs-15 fw-semibold d-sm-flex d-block align-items-center justify-content-between mb-">
+                                                @*   <div><b>Question:</b> @item.Qs </div> *@
+                                                <form id="Question_form_@item.QsNo" class="form">
+                                                    <div class="question ml-sm-5 pl-sm-5 pt-2">
+
+                                                        <div class="py-2 h5"><b>Q. @item.Qs</b></div>
+
+                                                        <div class="row gy-4 mb-4">
+                                                            <div class="col-xl-12">
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label options">
+                                                                        A. @item.Op1
+                                                                    </label>
+                                                                    <input class="form-check-input" value="Op1" type="radio" name="ans_@item.QsId">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-12">
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label options">
+                                                                        B. @item.Op2
+                                                                    </label>
+                                                                    <input class="form-check-input" value="Op2" type="radio" name="ans_@item.QsId">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-12">
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label options">
+                                                                        C. @item.Op3
+                                                                    </label>
+                                                                    <input class="form-check-input" value="Op3" type="radio" name="ans_@item.QsId">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-12">
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label options">
+                                                                        D. @item.Op4
+                                                                    </label>
+                                                                    <input class="form-check-input" value="Op4" type="radio" name="ans_@item.QsId">
+                                                                </div>
+                                                            </div>
+                                                           
+                                                            <div class="px-4 py-3 border-top border-block-start-dashed d-sm-flex justify-content-end">
+
+
+                                                                <div class="col-xl-12 row">
+                                                                    <div class="col-xl-6 form-check">
+                                                                        <button type="button" onclick="SureAnswer(@item.QsId,@item.QsNo)" class="btn btn-outline-primary btn-lg btn-wave">
+                                                                            Submit
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="col-xl-6 form-check">
+                                                                        <button type="button" onclick="NotSureAnswer(@item.QsId,@item.QsNo)" class="btn btn-outline-warning btn-lg btn-wave">
+                                                                            Not Sure
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="tab-pane fade border-0 p-0" id="Ques-@item.QsId-pane" role="tabpanel"
+                                         aria-labelledby="Ques-@item.QsId-pane" tabindex="-1">
+                                        <div class="p-4">
+                                            <p class="mb-1 fw-semibold text-muted op-5 fs-20">@item.QsNo</p>
+                                            <div class="fs-15 fw-semibold d-sm-flex d-block align-items-center justify-content-between mb-">
+                                                @*   <div><b>Question:</b> @item.Qs </div> *@
+                                                <form id="Question_form_@item.QsNo" class="form">
+                                                    <div class="question ml-sm-5 pl-sm-5 pt-2">
+
+                                                        <div class="py-2 h5"><b>Q. @item.Qs</b></div>
+
+                                                        <div class="row gy-4 mb-4">
+                                                            <div class="col-xl-12">
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label options">
+                                                                        A. @item.Op1
+                                                                    </label>
+                                                                    <input class="form-check-input" value="Op1" type="radio" name="ans_@item.QsId">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-12">
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label options">
+                                                                        B. @item.Op2
+                                                                    </label>
+                                                                    <input class="form-check-input" value="Op2" type="radio" name="ans_@item.QsId">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-12">
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label options">
+                                                                        C. @item.Op3
+                                                                    </label>
+                                                                    <input class="form-check-input" value="Op3" type="radio" name="ans_@item.QsId">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-12">
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label options">
+                                                                        D. @item.Op4
+                                                                    </label>
+                                                                    <input class="form-check-input" value="Op4" type="radio" name="ans_@item.QsId">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="px-4 py-3 border-top border-block-start-dashed d-sm-flex justify-content-end">
+
+
+                                                                <div class="col-xl-12 row">
+                                                                    <div class="col-xl-6 form-check">
+                                                                        <button type="button" onclick="SureAnswer(@item.QsId,@item.QsNo)" class="btn btn-outline-primary btn-lg btn-wave">
+                                                                            Submit
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="col-xl-6 form-check">
+                                                                        <button type="button" onclick="NotSureAnswer(@item.QsId,@item.QsNo)" class="btn btn-outline-warning btn-lg btn-wave">
+                                                                            Not Sure
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                                QuesCount++;
+                            }
+                        </div>
+
+                        <div class="px-4 py-3 border-top border-block-start-dashed d-sm-flex justify-content-end">
+
+                            <button id="prevBtn" class="btn btn-danger-light btn-wave " type="button">Previous <i class="ri-arrow-left-double-line"></i></button>
+
+                            <!-- Next Button -->
+                            <button id="nextBtn" class="btn btn-success-light btn-wave " type="button">Next <i class="bi bi-credit-card-2-front align-middle ms-2 d-inline-block"></i> </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3">
+                <div class="card custom-card">                 
+                    <div class="card-header">
+                        <input type="hidden" id="CourseID" value="@ViewBag.CourseId" />
+                        <input type="hidden" id="ClassId" value="@ViewBag.ClassId" />
+                        <div class="card-title me-1">Exam Summary</div><span class="badge bg-primary-transparent rounded-pill">@ViewBag.CourseId</span>
+                    </div>
+                    <div class="p-3 border-bottom border-block-end-dashed">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                            <div class="fs-12 fw-semibold bg-primary-transparent p-1 rounded">Time Left</div>
+
+                            <div class="text-success d-flex align-items-center justify-content-between flex-wrap">
+                                <div class="">
+                                    <i class="bx bx-time header-link-icon"></i>
+                                </div>
+                                <div class="">
+                                    <div id="timer"> 00:00:00</div>
+                                </div>
+
+                            </div>
+
+                            @*  <div class="text-success"> 26 mins : 49 secs</div> *@
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="p-3 border-bottom border-block-end-dashed">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                @foreach (var item in Model)
+                                {
+                                    <div class="fs-12 fw-semibold bg-primary-transparent p-1 rounded">
+                                        <button id="QuesBtn_@item.QsId" type="button" class="btn btn-primary-light position-relative">
+                                            @item.QsNo
+                                            <span id="Ans_@item.QsNo" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+
+                                            </span>
+                                        </button>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="p-3 border-bottom border-block-end-dashed">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                <div class="fs-12 fw-semibold bg-primary-transparent p-1 rounded">
+                                    <button class="btn btn-success label-btn label-end">
+                                        Submit
+                                        <i class="ri-thumb-up-line label-btn-icon ms-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End::row-1 -->
+</div>
+
+
+
+
+<script>
+
+    function NotSureAnswer(id, no) {
+
+        // var ans = $("#Question_form_"+id ).serialize();
+        var ans = $('input[name="ans_' + id + '"]:checked').val();
+        if (ans === undefined) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Please Select the answer..'
+            });
+            return false; // Return false if no radio button is selected
+        }
+        let Quesid = '#QuesBtn_' + id
+        var spanElement = $('<span id="Ans_' + id + '" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">' + ans + '</span>');
+        // Create the button element
+        var buttonElement = $('<button id="QuesBtn_' + id + '" type="button" class="btn btn-warning position-relative">' + no + '</button>');
+        // Append the span element into the button
+        buttonElement.append(spanElement);
+        // Replace the existing button with the newly created button containing the span
+        $(Quesid).replaceWith(buttonElement);
+    }
+    function SureAnswer(id, no) {
+
+        var ans = $('input[name="ans_' + id + '"]:checked').val();
+        if (ans === undefined) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Please Select the answer..'
+            });
+            return false; // Return false if no radio button is selected
+        }
+
+        var answer = {
+            CourseID : $('#CourseID').val(),
+            ClassId: $('#ClassId').val(),
+            id: id,
+            answerresult: ans,
+        }
+
+        console.log(answer);
+
+        // var emp = $("#Student_form").serialize();
+        var url = "/Exam/MCQ/SubmitAns";
+        var result = ModelPost(url, answer)
+        if (result = "Success") {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: result
+            });
+
+
+        }
+
+
+
+
+        let Quesid = '#QuesBtn_' + id
+        var spanElement = $('<span id="Ans_' + id + '" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">' + ans + '</span>');
+        // Create the button element
+        var buttonElement = $('<button id="QuesBtn_' + id + '" type="button" class="btn btn-primary position-relative">' + no + '</button>');
+        // Append the span element into the button
+        buttonElement.append(spanElement);
+        // Replace the existing button with the newly created button containing the span
+        $(Quesid).replaceWith(buttonElement);
+    }
+
+    function updateTimer() {
+        var timerElement = document.getElementById('timer');
+        var currentTime = 0; // Starting time in seconds
+
+        // Update the timer every second
+        setInterval(function () {
+            currentTime++; // Increment time by 1 second
+
+            // Calculate hours, minutes, and seconds
+            var hours = Math.floor(currentTime / 3600);
+            var minutes = Math.floor((currentTime % 3600) / 60);
+            var seconds = currentTime % 60;
+
+            // Format the time with leading zeros
+            var formattedTime =
+                (hours < 10 ? '0' : '') + hours + ':' +
+                (minutes < 10 ? '0' : '') + minutes + ':' +
+                (seconds < 10 ? '0' : '') + seconds;
+
+            // Update the timer display
+            timerElement.textContent = formattedTime;
+        }, 1000); // Update every second (1000 milliseconds)
+    }
+
+    // Call the function to start the timer
+    updateTimer();
+
+    $(document).ready(function () {
+        var tabs = $('.nav-link');
+        var currentTab = 0; // Initialize current tab index
+
+        // Show initial tab
+        $(tabs[currentTab]).tab('show');
+
+        // Next button click event
+        $('#nextBtn').on('click', function () {
+            currentTab = (currentTab + 1) % tabs.length; // Move to next tab or loop back to the first tab
+            $(tabs[currentTab]).tab('show'); // Show the next tab
+        });
+
+        // Previous button click event
+        $('#prevBtn').on('click', function () {
+            currentTab = (currentTab - 1 + tabs.length) % tabs.length; // Move to previous tab or loop to the last tab
+            $(tabs[currentTab]).tab('show'); // Show the previous tab
+        });
+    });
+</script>

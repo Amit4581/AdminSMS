@@ -1,0 +1,235 @@
+﻿
+@model IEnumerable<Admin.Contract.Model.Student.StudentDetails>
+
+
+<!-- Page Header -->
+<div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+    <h1 class="page-title fw-semibold fs-18 mb-0">Students List</h1>
+    <div class="ms-md-1 ms-0">
+        <nav>
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Students</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Students List</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-header justify-content-between">
+                <a asp-area="" asp-controller="Student" asp-action="AddStudent" class="btn btn-primary label-btn">
+                    <i class="ri-user-add-line label-btn-icon me-2"></i>
+                   Add Student
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table text-nowrap" id="myTable">
+                        <thead >
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Created On</th>
+                                <th scope="col">Number</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    @if (item.Gender=="1")
+                                    {
+                                        <td scope="row">
+                                            <div class="d-flex align-items-center">
+                                                <span class="avatar avatar-xs me-2 online avatar-rounded">
+                                                    <img src="../assets/images/faces/15.jpg" alt="img">
+                                                </span>@item.StudentName
+                                            </div>
+                                        </td>
+                                    }
+                                    else if (item.Gender == "2")
+                                    {
+                                        <td scope="row">
+                                            <div class="d-flex align-items-center">
+                                                <span class="avatar avatar-xs me-2 offline avatar-rounded">
+                                                    <img src="../assets/images/faces/6.jpg" alt="img">
+                                                </span>@item.StudentName
+                                            </div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                         <td scope="row">
+                                        </td>
+                                    }
+                                   
+                                   @*  <th scope="row">@item.StudentName</th> *@
+                                    <td>@item.CreatedDate</td>
+                                    <td>@item.StudentPhone</td>
+                                    <td><span class="badge bg-success-transparent">Active</span></td>
+                                </tr>
+                            }
+                          
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-header justify-content-between">
+                <div class="card-title">
+                    Bordered Tables
+                </div>
+                <div class="prism-toggle">
+                    <button class="btn btn-sm btn-primary-light">Show Code<i class="ri-code-line ms-2 d-inline-block align-middle"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table text-nowrap table-bordered" id="tblstatus">
+                        <thead>
+                            <tr>
+                                <th scope="col">User</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">
+                                    <div class="d-flex align-items-center">
+                                        <span class="avatar avatar-xs me-2 online avatar-rounded">
+                                            <img src="../assets/images/faces/13.jpg" alt="img">
+                                        </span>Sukuro Kim
+                                    </div>
+                                </th>
+                                <td><span class="badge bg-success-transparent">Active</span></td>
+                                <td>kimosukuro@gmail.com</td>
+                                <td>
+                                    <div class="hstack gap-2 flex-wrap">
+                                        <a href="javascript:void(0);" class="text-info fs-14 lh-1">
+                                            <i class="ri-edit-line"></i>
+                                        </a>
+                                        <a href="javascript:void(0);" class="text-danger fs-14 lh-1">
+                                            <i class="ri-delete-bin-5-line"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <div class="d-flex align-items-center">
+                                        <span class="avatar avatar-xs me-2 offline avatar-rounded">
+                                            <img src="../assets/images/faces/6.jpg" alt="img">
+                                        </span>Hasimna
+                                    </div>
+                                </th>
+                                <td><span class="badge bg-light text-dark">Inactive</span></td>
+                                <td>hasimna2132@gmail.com</td>
+                                <td>
+                                    <div class="hstack gap-2 flex-wrap">
+                                        <a href="javascript:void(0);" class="text-info fs-14 lh-1">
+                                            <i class="ri-edit-line"></i>
+                                        </a>
+                                        <a href="javascript:void(0);" class="text-danger fs-14 lh-1">
+                                            <i class="ri-delete-bin-5-line"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <div class="d-flex align-items-center">
+                                        <span class="avatar avatar-xs me-2 online avatar-rounded">
+                                            <img src="../assets/images/faces/15.jpg" alt="img">
+                                        </span>Azimo Khan
+                                    </div>
+                                </th>
+                                <td><span class="badge bg-success-transparent">Active</span></td>
+                                <td>azimokhan421@gmail.com</td>
+                                <td>
+                                    <div class="hstack gap-2 flex-wrap">
+                                        <a href="javascript:void(0);" class="text-info fs-14 lh-1">
+                                            <i class="ri-edit-line"></i>
+                                        </a>
+                                        <a href="javascript:void(0);" class="text-danger fs-14 lh-1">
+                                            <i class="ri-delete-bin-5-line"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <div class="d-flex align-items-center">
+                                        <span class="avatar avatar-xs me-2 online avatar-rounded">
+                                            <img src="../assets/images/faces/5.jpg" alt="img">
+                                        </span>Samantha Julia
+                                    </div>
+                                </th>
+                                <td><span class="badge bg-success-transparent">Active</span></td>
+                                <td>julianasams143@gmail.com</td>
+                                <td>
+                                    <div class="hstack gap-2 flex-wrap">
+                                        <a href="javascript:void(0);" class="text-info fs-14 lh-1">
+                                            <i class="ri-edit-line"></i>
+                                        </a>
+                                        <a href="javascript:void(0);" class="text-danger fs-14 lh-1">
+                                            <i class="ri-delete-bin-5-line"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+        $('#tblstatus').DataTable();
+
+        // $('#tblstatus').DataTable({
+        //     dom: 'Bfrtip',
+        //     buttons: [
+        //         'copy', 'csv', 'excel', 'pdf', 'print'
+        //     ]
+        // });
+
+        // $('#tblstatus').DataTable({
+        //     dom: 'Bfrtip',
+        //     buttons: [
+        //         'copy', 'csv', 'excel', 'pdf', 'print'
+        //     ]
+        // });
+
+
+        // var table = $('#tblstatus').DataTable({
+        //     buttons: [
+        //         'excel'
+        //     ]
+        // });
+
+        // new $.fn.dataTable.Buttons(table, {
+        //     buttons: [
+        //         'excel'
+        //     ]
+        // });
+
+        // table.buttons().container()
+        //     .appendTo($('#tblstatus_wrapper .col-md-6:eq(0)'));
+    });
+
+</script>
